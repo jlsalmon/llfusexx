@@ -32,7 +32,7 @@ namespace llfusexx
   template <typename T>
   class fs
   {
-    public:
+    private:
 
       //------------------------------------------------------------------------
       //!
@@ -42,11 +42,12 @@ namespace llfusexx
       //------------------------------------------------------------------------
       //!
       //------------------------------------------------------------------------
-      static fs& instance()
+      const fuse_lowlevel_ops* get_operations()
       {
-        static fs fs;
-        return fs;
+        return &operations;
       }
+
+    public:
 
       //------------------------------------------------------------------------
       //!
@@ -59,14 +60,6 @@ namespace llfusexx
         operations.write   = &T::write;
         operations.open    = &T::open;
         operations.lookup  = &T::lookup;
-      }
-
-      //------------------------------------------------------------------------
-      //!
-      //------------------------------------------------------------------------
-      const fuse_lowlevel_ops* get_operations()
-      {
-        return &operations;
       }
 
       //------------------------------------------------------------------------
