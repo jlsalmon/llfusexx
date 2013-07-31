@@ -19,7 +19,13 @@
 #ifndef __LLFUSEXX_FS_HPP__
 #define __LLFUSEXX_FS_HPP__
 
+#ifndef FUSE_USE_VERSION
+#ifdef __APPLE__
 #define FUSE_USE_VERSION 27
+#else
+#define FUSE_USE_VERSION 26
+#endif
+#endif
 
 #include <fuse_lowlevel.h>
 #include <cstdlib>
