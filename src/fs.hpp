@@ -60,12 +60,29 @@ namespace llfusexx
       //------------------------------------------------------------------------
       fs()
       {
-        operations.getattr = &T::getattr;
-        operations.readdir = &T::readdir;
-        operations.read    = &T::read;
-        operations.write   = &T::write;
-        operations.open    = &T::open;
-        operations.lookup  = &T::lookup;
+        operations.getattr      = &T::getattr;
+        operations.lookup       = &T::lookup;
+        operations.setattr      = &T::setattr;
+        operations.access       = &T::access;
+        operations.readdir      = &T::readdir;
+        operations.mknod        = &T::mknod;
+        operations.mkdir        = &T::mkdir;
+        operations.unlink       = &T::unlink;
+        operations.rmdir        = &T::rmdir;
+        operations.rename       = &T::rename;
+        operations.open         = &T::open;
+        operations.read         = &T::read;
+        operations.write        = &T::write;
+        operations.statfs       = &T::statfs;
+        operations.release      = &T::release;
+        operations.releasedir   = &T::releasedir;
+        operations.fsync        = &T::fsync;
+        operations.forget       = &T::forget;
+        operations.flush        = &T::flush;
+        operations.setxattr     = &T::setxattr;
+        operations.getxattr     = &T::getxattr;
+        operations.listxattr    = &T::listxattr;
+        operations.removexattr  = &T::removexattr;
       }
 
       //------------------------------------------------------------------------
