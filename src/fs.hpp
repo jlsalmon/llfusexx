@@ -33,7 +33,7 @@
 namespace llfusexx
 {
   //----------------------------------------------------------------------------
-  //!
+  //! Interface to the low-level FUSE API
   //----------------------------------------------------------------------------
   template <typename T>
   class fs
@@ -41,25 +41,31 @@ namespace llfusexx
     private:
 
       //------------------------------------------------------------------------
-      //!
+      //! Structure holding function pointers to the low-level "operations"
+      //! (function implementations)
       //------------------------------------------------------------------------
       struct fuse_lowlevel_ops operations;
 
       //------------------------------------------------------------------------
-      //!
+      //! @return const reference to the operations struct
       //------------------------------------------------------------------------
-      const fuse_lowlevel_ops* get_operations()
+      const fuse_lowlevel_ops& get_operations()
       {
-        return &operations;
+        return operations;
       }
 
     public:
 
       //------------------------------------------------------------------------
+      //! Constructor
       //!
+      //! Install pointers to operation functions as implemented by the user
+      //! subclass
       //------------------------------------------------------------------------
       fs()
       {
+        operations.init         = &T::init;
+        operations.destroy      = &T::destroy;
         operations.getattr      = &T::getattr;
         operations.lookup       = &T::lookup;
         operations.setattr      = &T::setattr;
@@ -71,6 +77,7 @@ namespace llfusexx
         operations.rmdir        = &T::rmdir;
         operations.rename       = &T::rename;
         operations.open         = &T::open;
+        operations.opendir      = &T::opendir;
         operations.read         = &T::read;
         operations.write        = &T::write;
         operations.statfs       = &T::statfs;
@@ -86,7 +93,7 @@ namespace llfusexx
       }
 
       //------------------------------------------------------------------------
-      //!
+      //! Mount the filesystem with the supplied arguments and run the daemon
       //------------------------------------------------------------------------
       int daemonize( int argc, char* argv[] )
       {
@@ -95,28 +102,60 @@ namespace llfusexx
         char             *mountpoint;
         int               error = -1;
 
+        //----------------------------------------------------------------------
+        //! Parse the commandline and mount the filesystem
+        //----------------------------------------------------------------------
         if( fuse_parse_cmdline( &args, &mountpoint, NULL, NULL ) != -1
             && ( channel = fuse_mount( mountpoint, &args ) ) != NULL )
         {
           struct fuse_session *session;
 
+          //--------------------------------------------------------------------
+          //! Create a new low-level fuse session
+          //--------------------------------------------------------------------
           session = fuse_lowlevel_new( &args,
-                                       get_operations(),
+                                       &(get_operations()),
                                        sizeof(fs::operations),
                                        NULL );
           if( session != NULL )
           {
+            //------------------------------------------------------------------
+            //! Set appropriate signal handlers
+            //------------------------------------------------------------------
             if( fuse_set_signal_handlers( session ) != -1 )
             {
+              //----------------------------------------------------------------
+              //! Add the mountpoint to the session
+              //----------------------------------------------------------------
               fuse_session_add_chan( session, channel );
+
+              //----------------------------------------------------------------
+              //! Start the multithreaded session loop
+              //----------------------------------------------------------------
               error = fuse_session_loop_mt( session );
+
+              //----------------------------------------------------------------
+              //! Clean up
+              //----------------------------------------------------------------
               fuse_remove_signal_handlers( session );
               fuse_session_remove_chan( channel );
             }
+
+            //------------------------------------------------------------------
+            //! Destroy the session
+            //------------------------------------------------------------------
             fuse_session_destroy( session );
           }
+
+          //--------------------------------------------------------------------
+          //! Unmount the mountpoint
+          //--------------------------------------------------------------------
           fuse_unmount( mountpoint, channel );
         }
+
+        //----------------------------------------------------------------------
+        //! Clean up the fuse arguments
+        //----------------------------------------------------------------------
         fuse_opt_free_args( &args );
 
         return error ? 1 : 0;
