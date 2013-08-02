@@ -16,8 +16,8 @@
 // along with This program.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------
 
-#ifndef __LLFUSEXX_FS_HPP__
-#define __LLFUSEXX_FS_HPP__
+#ifndef __LLFUSEXX_H__
+#define __LLFUSEXX_H__
 
 #ifndef FUSE_USE_VERSION
 #ifdef __APPLE__
@@ -60,7 +60,6 @@ namespace llfusexx
       }
 
     public:
-
       //------------------------------------------------------------------------
       //! Constructor
       //!
@@ -98,15 +97,15 @@ namespace llfusexx
       }
 
       //------------------------------------------------------------------------
-      //! @return static instance of this class
-      //------------------------------------------------------------------------
-      static fs& instance() {
-        static fs fs;
-        return fs;
-      }
-
-      //------------------------------------------------------------------------
       //! Mount the filesystem with the supplied arguments and run the daemon
+      //!
+      //! @param argc     commandline argument count
+      //! @param argv     commandline argument vector
+      //! @param self     reference to user subclass instance, used for
+      //!                 convenience within static functions
+      //! @param userdata optional extra user data
+      //!
+      //! @return 0 on success, -1 on error
       //------------------------------------------------------------------------
       int daemonize( int argc, char* argv[], T *self, void *userdata )
       {
@@ -183,8 +182,11 @@ namespace llfusexx
       }
   };
 
+  //----------------------------------------------------------------------------
+  //! Static declarations
+  //----------------------------------------------------------------------------
   template<class T> fuse_lowlevel_ops fs<T>::operations;
   template<class T> T *fs<T>::self;
 }
 
-#endif /* __LLFUSEXX_FS_HPP__ */
+#endif /* __LLFUSEXX_H__ */
