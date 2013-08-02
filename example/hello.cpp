@@ -1,4 +1,4 @@
-#include "llfusexx.hpp"
+#include "llfusexx.h"
 #include <iostream>
 #include <cstring>
 #include <cerrno>
@@ -25,7 +25,7 @@ class hellofs : public llfusexx::fs<hellofs>
     virtual ~hellofs() {};
 
     //--------------------------------------------------------------------------
-    //
+    // Stat a file
     //--------------------------------------------------------------------------
     static int hello_stat( fuse_ino_t ino, struct stat *stbuf )
     {
