@@ -420,5 +420,5 @@ int main( int argc, char *argv[] )
   //! Runs the daemon at the mountpoint specified in argv and with other
   //! options if specified
   //----------------------------------------------------------------------------
-  return fs.daemonize( argc, argv );
+  return fs.daemonize( argc, argv, &fs, NULL );
 }
