@@ -38,13 +38,18 @@ namespace llfusexx
   template <typename T>
   class fs
   {
-    private:
+    protected:
+      //------------------------------------------------------------------------
+      //! Allow static methods to access object methods/ variables using 'self'
+      //! instead of 'this'
+      //------------------------------------------------------------------------
+      static T *self;
 
       //------------------------------------------------------------------------
       //! Structure holding function pointers to the low-level "operations"
       //! (function implementations)
       //------------------------------------------------------------------------
-      struct fuse_lowlevel_ops operations;
+      static struct fuse_lowlevel_ops operations;
 
       //------------------------------------------------------------------------
       //! @return const reference to the operations struct
@@ -103,7 +108,7 @@ namespace llfusexx
       //------------------------------------------------------------------------
       //! Mount the filesystem with the supplied arguments and run the daemon
       //------------------------------------------------------------------------
-      int daemonize( int argc, char* argv[] )
+      int daemonize( int argc, char* argv[], T *self, void *userdata )
       {
         struct fuse_args  args = FUSE_ARGS_INIT(argc, argv);
         struct fuse_chan *channel;
@@ -116,15 +121,23 @@ namespace llfusexx
         if( fuse_parse_cmdline( &args, &mountpoint, NULL, NULL ) != -1
             && ( channel = fuse_mount( mountpoint, &args ) ) != NULL )
         {
-          struct fuse_session *session;
+          //--------------------------------------------------------------------
+          //! The 'self' variable will be the equivalent of the 'this' pointer
+          //--------------------------------------------------------------------
+          if (self == NULL) {
+              return -1;
+          }
+
+          T::self = self;
 
           //--------------------------------------------------------------------
           //! Create a new low-level fuse session
           //--------------------------------------------------------------------
+          struct fuse_session *session;
           session = fuse_lowlevel_new( &args,
                                        &(get_operations()),
                                        sizeof(fs::operations),
-                                       NULL );
+                                       userdata );
           if( session != NULL )
           {
             //------------------------------------------------------------------
@@ -169,6 +182,9 @@ namespace llfusexx
         return error ? 1 : 0;
       }
   };
+
+  template<class T> fuse_lowlevel_ops fs<T>::operations;
+  template<class T> T *fs<T>::self;
 }
 
 #endif /* __LLFUSEXX_FS_HPP__ */
