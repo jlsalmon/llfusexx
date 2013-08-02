@@ -92,6 +92,9 @@ namespace llfusexx
         operations.removexattr  = &T::removexattr;
       }
 
+      //------------------------------------------------------------------------
+      //! @return static instance of this class
+      //------------------------------------------------------------------------
       static fs& instance() {
         static fs fs;
         return fs;
