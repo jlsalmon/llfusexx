@@ -115,13 +115,13 @@ namespace llfusexx
         int               error = -1;
 
         //----------------------------------------------------------------------
-        //! Parse the commandline and mount the filesystem
+        // Parse the commandline and mount the filesystem
         //----------------------------------------------------------------------
         if( fuse_parse_cmdline( &args, &mountpoint, NULL, NULL ) != -1
             && ( channel = fuse_mount( mountpoint, &args ) ) != NULL )
         {
           //--------------------------------------------------------------------
-          //! The 'self' variable will be the equivalent of the 'this' pointer
+          // The 'self' variable will be the equivalent of the 'this' pointer
           //--------------------------------------------------------------------
           if (self == NULL) {
               return -1;
@@ -130,7 +130,7 @@ namespace llfusexx
           T::self = self;
 
           //--------------------------------------------------------------------
-          //! Create a new low-level fuse session
+          // Create a new low-level fuse session
           //--------------------------------------------------------------------
           struct fuse_session *session;
           session = fuse_lowlevel_new( &args,
@@ -140,41 +140,41 @@ namespace llfusexx
           if( session != NULL )
           {
             //------------------------------------------------------------------
-            //! Set appropriate signal handlers
+            // Set appropriate signal handlers
             //------------------------------------------------------------------
             if( fuse_set_signal_handlers( session ) != -1 )
             {
               //----------------------------------------------------------------
-              //! Add the mountpoint to the session
+              // Add the mountpoint to the session
               //----------------------------------------------------------------
               fuse_session_add_chan( session, channel );
 
               //----------------------------------------------------------------
-              //! Start the multithreaded session loop
+              // Start the multithreaded session loop
               //----------------------------------------------------------------
               error = fuse_session_loop_mt( session );
 
               //----------------------------------------------------------------
-              //! Clean up
+              // Clean up
               //----------------------------------------------------------------
               fuse_remove_signal_handlers( session );
               fuse_session_remove_chan( channel );
             }
 
             //------------------------------------------------------------------
-            //! Destroy the session
+            // Destroy the session
             //------------------------------------------------------------------
             fuse_session_destroy( session );
           }
 
           //--------------------------------------------------------------------
-          //! Unmount the mountpoint
+          // Unmount the mountpoint
           //--------------------------------------------------------------------
           fuse_unmount( mountpoint, channel );
         }
 
         //----------------------------------------------------------------------
-        //! Clean up the fuse arguments
+        // Clean up the fuse arguments
         //----------------------------------------------------------------------
         fuse_opt_free_args( &args );
 

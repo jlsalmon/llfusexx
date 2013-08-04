@@ -15,17 +15,17 @@ class hellofs : public llfusexx::fs<hellofs>
 {
   public:
     //--------------------------------------------------------------------------
-    // Constructor
+    //! Constructor
     //--------------------------------------------------------------------------
     hellofs() {};
 
     //--------------------------------------------------------------------------
-    // Destructor
+    //! Destructor
     //--------------------------------------------------------------------------
     virtual ~hellofs() {};
 
     //--------------------------------------------------------------------------
-    // Stat a file
+    //! Stat a file
     //--------------------------------------------------------------------------
     static int hello_stat( fuse_ino_t ino, struct stat *stbuf )
     {
@@ -52,7 +52,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Initialize filesystem
+    //! Initialize filesystem
     //--------------------------------------------------------------------------
     static void init (void *userdata, struct fuse_conn_info *conn)
     {
@@ -60,7 +60,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Clean up filesystem
+    //! Clean up filesystem
     //--------------------------------------------------------------------------
     static void destroy (void *userdata)
     {
@@ -68,7 +68,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Get file attributes
+    //! Get file attributes
     //--------------------------------------------------------------------------
     static void getattr (fuse_req_t             req,
                          fuse_ino_t             ino,
@@ -87,7 +87,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Change attributes of a file
+    //! Change attributes of a file
     //--------------------------------------------------------------------------
     static void setattr (fuse_req_t             req,
                          fuse_ino_t             ino,
@@ -99,7 +99,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Lookup an entry
+    //! Lookup an entry
     //--------------------------------------------------------------------------
     static void lookup (fuse_req_t  req,
                         fuse_ino_t  parent,
@@ -162,7 +162,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Read the entries from a directory
+    //! Read the entries from a directory
     //--------------------------------------------------------------------------
     static void readdir (fuse_req_t             req,
                          fuse_ino_t             ino,
@@ -189,7 +189,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Drop directory view
+    //! Drop directory view
     //--------------------------------------------------------------------------
     static void releasedir (fuse_req_t             req,
                             fuse_ino_t             ino,
@@ -200,7 +200,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Return statistics about the filesystem
+    //! Return statistics about the filesystem
     //--------------------------------------------------------------------------
     static void statfs (fuse_req_t req, fuse_ino_t ino)
     {
@@ -208,7 +208,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Make a special (device) file, FIFO, or socket
+    //! Make a special (device) file, FIFO, or socket
     //--------------------------------------------------------------------------
     static void mknod (fuse_req_t  req,
                        fuse_ino_t  parent,
@@ -220,7 +220,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Create a directory with a given name
+    //! Create a directory with a given name
     //--------------------------------------------------------------------------
     static void mkdir (fuse_req_t  req,
                        fuse_ino_t  parent,
@@ -231,7 +231,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Remove (delete) the given file, symbolic link, hard link, or special node
+    //! Remove (delete) the given file, symbolic link, hard link, or special node
     //--------------------------------------------------------------------------
     static void unlink (fuse_req_t req, fuse_ino_t parent, const char *name)
     {
@@ -239,7 +239,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Remove the given directory
+    //! Remove the given directory
     //--------------------------------------------------------------------------
     static void rmdir (fuse_req_t req, fuse_ino_t parent, const char *name)
     {
@@ -247,7 +247,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Rename the file, directory, or other object
+    //! Rename the file, directory, or other object
     //--------------------------------------------------------------------------
     static void rename (fuse_req_t  req,
                         fuse_ino_t  parent,
@@ -267,7 +267,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Open a file
+    //! Open a file
     //--------------------------------------------------------------------------
     static void open (fuse_req_t             req,
                       fuse_ino_t             ino,
@@ -284,7 +284,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Open a directory
+    //! Open a directory
     //--------------------------------------------------------------------------
     static void opendir (fuse_req_t             req,
                          fuse_ino_t             ino,
@@ -295,8 +295,8 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Read from file. Returns the number of bytes transferred, or 0 if offset
-    // was at or beyond the end of the file.
+    //! Read from file. Returns the number of bytes transferred, or 0 if offset
+    //! was at or beyond the end of the file.
     //--------------------------------------------------------------------------
     static void read (fuse_req_t             req,
                       fuse_ino_t             ino,
@@ -312,7 +312,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Write function
+    //! Write function
     //--------------------------------------------------------------------------
     static void write (fuse_req_t             req,
                        fuse_ino_t             ino,
@@ -325,8 +325,8 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Release is called when FUSE is completely done with a file; at that point,
-    // you can free up any temporarily allocated data structures.
+    //! Release is called when FUSE is completely done with a file; at that point,
+    //! you can free up any temporarily allocated data structures.
     //--------------------------------------------------------------------------
     static void release (fuse_req_t             req,
                          fuse_ino_t             ino,
@@ -336,7 +336,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Flush any dirty information about the file to disk
+    //! Flush any dirty information about the file to disk
     //--------------------------------------------------------------------------
     static void fsync (fuse_req_t             req,
                        fuse_ino_t             ino,
@@ -347,7 +347,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Forget inode <-> path mapping
+    //! Forget inode <-> path mapping
     //--------------------------------------------------------------------------
     static void forget (fuse_req_t req, fuse_ino_t ino, unsigned long nlookup)
     {
@@ -355,9 +355,9 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Called on each close so that the filesystem has a chance to report delayed errors
-    // Important: there may be more than one flush call for each open.
-    // Note: There is no guarantee that flush will ever be called at all!
+    //! Called on each close so that the filesystem has a chance to report delayed errors
+    //! Important: there may be more than one flush call for each open.
+    //! Note: There is no guarantee that flush will ever be called at all!
     //--------------------------------------------------------------------------
     static void flush (fuse_req_t             req,
                        fuse_ino_t             ino,
@@ -368,7 +368,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Get an extended attribute
+    //! Get an extended attribute
     //--------------------------------------------------------------------------
     static void getxattr (fuse_req_t  req,
                           fuse_ino_t  ino,
@@ -381,7 +381,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // List extended attributes
+    //! List extended attributes
     //--------------------------------------------------------------------------
     static void listxattr (fuse_req_t req, fuse_ino_t ino, size_t size)
     {
@@ -389,7 +389,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Remove extended attribute
+    //! Remove extended attribute
     //--------------------------------------------------------------------------
     static void removexattr (fuse_req_t  req,
                              fuse_ino_t  ino,
@@ -399,7 +399,7 @@ class hellofs : public llfusexx::fs<hellofs>
     }
 
     //--------------------------------------------------------------------------
-    // Set extended attribute
+    //! Set extended attribute
     //--------------------------------------------------------------------------
     static void setxattr (fuse_req_t  req,
                           fuse_ino_t  ino,
