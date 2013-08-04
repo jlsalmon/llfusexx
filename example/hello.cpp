@@ -10,6 +10,8 @@ static const char *hello_name = "hello";
 
 //------------------------------------------------------------------------------
 //! Curiously recurring templates....
+//!
+//!   g++ -Wall `pkg-config fuse --cflags --libs` hello.cpp -o hello
 //------------------------------------------------------------------------------
 class hellofs : public llfusexx::fs<hellofs>
 {
@@ -370,14 +372,45 @@ class hellofs : public llfusexx::fs<hellofs>
     //--------------------------------------------------------------------------
     //! Get an extended attribute
     //--------------------------------------------------------------------------
-    static void getxattr (fuse_req_t  req,
+#ifdef __APPLE__
+    static void getxattr( fuse_req_t  req,
                           fuse_ino_t  ino,
-                          const char *xattr_name,
-                          size_t      size)
+                          const char *name,
+                          size_t      size,
+                          uint32_t    position )
+#else
+    static void getxattr( fuse_req_t  req,
+                          fuse_ino_t  ino,
+                          const char *name,
+                          size_t      size )
+#endif
     {
       std::cout << "getxattr()" << std::endl;
       fuse_reply_err (req, ENODATA);
       return;
+    }
+
+    //--------------------------------------------------------------------------
+    //! Set extended attribute
+    //--------------------------------------------------------------------------
+#ifdef __APPLE__
+    static void setxattr( fuse_req_t  req,
+                          fuse_ino_t  ino,
+                          const char *name,
+                          const char *value,
+                          size_t      size,
+                          int         flags,
+                          uint32_t    position )
+#else
+    static void setxattr( fuse_req_t  req,
+                          fuse_ino_t  ino,
+                          const char *name,
+                          const char *value,
+                          size_t      size,
+                          int         flags )
+#endif
+    {
+      std::cout << "setxattr()" << std::endl;
     }
 
     //--------------------------------------------------------------------------
@@ -396,19 +429,6 @@ class hellofs : public llfusexx::fs<hellofs>
                              const char *xattr_name)
     {
       std::cout << "removexattr()" << std::endl;
-    }
-
-    //--------------------------------------------------------------------------
-    //! Set extended attribute
-    //--------------------------------------------------------------------------
-    static void setxattr (fuse_req_t  req,
-                          fuse_ino_t  ino,
-                          const char *xattr_name,
-                          const char *xattr_value,
-                          size_t      size,
-                          int         flags)
-    {
-      std::cout << "setxattr()" << std::endl;
     }
 };
 
